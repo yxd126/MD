@@ -31,9 +31,9 @@ public class BIOTester {
         String originalTag = classifier.discreteValue(c);
         String inferedTag = originalTag;
         if (!originalTag.equals("B")) {
-            if (BIOFeatureExtractor.isInPronounList(c)) {
-                //inferedTag = "B";
-            }
+//            if (BIOFeatureExtractor.isInPronounList(c)) {
+//                //inferedTag = "B";
+//            }
         }
         return inferedTag;
     }
@@ -81,12 +81,24 @@ public class BIOTester {
 
                 preBIOLevel1 = bioTag;
                 preBIOLevel2 = preBIOLevel1;
-                if (bioTag.equals("B")){
+
+
+
+                if (bioTag.equals("B") || bioTag.equals("U")){
                     predicted_mention ++;
                 }
                 String correctTag = output.discreteValue(example);
-                if (correctTag.equals("B")){
+
+                if (correctTag.equals("B") || correctTag.equals("U")){
                     labeled_mention ++;
+                }
+
+                if (bioTag.equals("U") && correctTag.equals("U")) {
+                    correct_mention++;
+                    continue;
+                }
+
+                if (correctTag.equals("B") && bioTag.equals("B")){
                     Constituent curToken = (Constituent)example;
                     Constituent pointerToken = curToken;
                     boolean correct_predicted = true;
@@ -95,7 +107,7 @@ public class BIOTester {
                     int endIdx = startIdx + 1;
                     String preBIOLevel1_dup = ((Constituent) example).getAttribute("preBIOLevel1");
                     String preBIOLevel2_dup = ((Constituent) example).getAttribute("preBIOLevel2");
-                    while (!pointerToken.getAttribute("BIO").equals("O")){
+                    while (!pointerToken.getAttribute("BIO").equals("O") && !pointerToken.getAttribute("BIO").equals("U")){
                         if (endIdx - 1 > startIdx){
                             if (pointerToken.getAttribute("BIO").equals("B")){
                                 break;
