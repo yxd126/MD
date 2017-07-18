@@ -148,6 +148,17 @@ public class BIOReader implements Parser
                     if (!c.getAttribute("EntityMentionType").equals(excludeType)) {
                         continue;
                     }
+                    Constituent cHead = ACEReader.getEntityHeadForConstituent(c, ta, "HEAD");
+                    if (cHead.getStartSpan()+1 == cHead.getEndSpan()) {
+                        token2tags[cHead.getStartSpan()] = "U," + c.getAttribute("EntityMentionType");
+                    }
+                    else {
+                        token2tags[cHead.getStartSpan()] = "B," + c.getAttribute("EntityMentionType");
+                        for (int i = cHead.getStartSpan() + 1; i < cHead.getEndSpan() - 1; i++) {
+                            token2tags[i] = "I," + c.getAttribute("EntityMentionType");
+                        }
+                        token2tags[cHead.getEndSpan() - 1] = "L," + c.getAttribute("EntityMentionType");
+                    }
                 }
                 Constituent cHead = ACEReader.getEntityHeadForConstituent(c, ta, "HEAD");
                 if (cHead == null){
