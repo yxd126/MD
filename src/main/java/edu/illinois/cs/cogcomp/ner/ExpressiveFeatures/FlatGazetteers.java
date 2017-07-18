@@ -250,12 +250,34 @@ public class FlatGazetteers implements Gazetteers {
                         String shortName = "I-" + fullName.split("/")[fullName.split("/").length - 1];
                         ret += shortName + ",";
                     }
+                    String pointerString = bioView.getConstituentsCoveringToken(curTokenIdx).get(0).toString();
+                    combinedExpression += pointerString + " ";
                 }
-                for (int i = 0; i < dictionariesIgnoreCase.size(); i++){
-                    if (dictionariesIgnoreCase.get(i).contains(combinedExpression.toLowerCase())) {
-                        String fullName = dictNames.get(i);
-                        String shortName = "I-" + fullName.split("/")[fullName.split("/").length - 1];
-                        ret += shortName + "(IC),";
+                if (combinedExpression.endsWith(" ")) {
+                    combinedExpression = combinedExpression.substring(0, combinedExpression.length() - 1);
+                }
+                if (integrity) {
+                    for (int i = 0; i < dictionaries.size(); i++) {
+                        if (dictionaries.get(i).contains(combinedExpression)) {
+                            String fullName = dictNames.get(i);
+                            String shortName = fullName.split("/")[fullName.split("/").length - 1];
+                            if (startIdx == 0) {
+                                ret += "B-" + shortName + ",";
+                            } else {
+                                ret += "L-" + shortName + ",";
+                            }
+                        }
+                    }
+                    for (int i = 0; i < dictionariesIgnoreCase.size(); i++) {
+                        if (dictionariesIgnoreCase.get(i).contains(combinedExpression)) {
+                            String fullName = dictNames.get(i);
+                            String shortName = fullName.split("/")[fullName.split("/").length - 1] + "(IC)";
+                            if (startIdx == 0) {
+                                ret += "B-" + shortName + ",";
+                            } else {
+                                ret += "L-" + shortName + ",";
+                            }
+                        }
                     }
                 }
             }

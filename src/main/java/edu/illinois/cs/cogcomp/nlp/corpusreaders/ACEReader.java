@@ -134,6 +134,10 @@ public class ACEReader extends AnnotationReader<TextAnnotation> {
     public static Constituent getEntityHeadForConstituent(Constituent extentConstituent,
                                                            TextAnnotation textAnnotation,
                                                            String viewName) {
+        if (extentConstituent.getAttribute("EntityHeadStartCharOffset") == null ||
+                extentConstituent.getAttribute("EntityHeadEndCharOffset") == null){
+            return null;
+        }
         int startCharOffset =
                 Integer.parseInt(extentConstituent
                         .getAttribute(ACEReader.EntityHeadStartCharOffset));
@@ -241,7 +245,8 @@ public class ACEReader extends AnnotationReader<TextAnnotation> {
             i = i + curTokenLength - 1;
         }
         resText = new String(resTextChar);
-        String[] fileNameGroup = fileName.split("\\\\");
+        String fileNameTransformed = fileName.replace(File.separator, "/");
+        String[] fileNameGroup = fileNameTransformed.split("/");
         String groupName = fileNameGroup[fileNameGroup.length - 2];
         if (groupName.equals("bn")) {
             ta =
