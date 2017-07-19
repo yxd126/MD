@@ -141,8 +141,10 @@ public class ACEReader extends AnnotationReader<TextAnnotation> {
         int startCharOffset =
                 Integer.parseInt(extentConstituent
                         .getAttribute(ACEReader.EntityHeadStartCharOffset));
+
         int endCharOffset =
                 Integer.parseInt(extentConstituent.getAttribute(ACEReader.EntityHeadEndCharOffset)) - 1;
+
         int startToken = textAnnotation.getTokenIdFromCharacterOffset(startCharOffset);
         int endToken = textAnnotation.getTokenIdFromCharacterOffset(endCharOffset);
 

@@ -164,6 +164,7 @@ public class BIOReader implements Parser
                 if (cHead == null){
                     continue;
                 }
+
                 token2tags[cHead.getStartSpan()] = "B," + c.getAttribute("EntityMentionType");
                 for (int i = cHead.getStartSpan() + 1; i < cHead.getEndSpan(); i++){
                     token2tags[i] = "I," + c.getAttribute("EntityMentionType");
